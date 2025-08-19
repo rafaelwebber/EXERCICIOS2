@@ -1,9 +1,10 @@
-import java.util.Random;
 package org.example;
+
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-       
+
         String[] nomes = {"Rafael", "João", "Micael", "Carlos", "Pedro", "Lucas", "Thiago", "Bruno", "Felipe", "André", "Gustavo"};
         String[] sobrenomes = {"Lumertz", "Webber", "Lima", "Silva", "Souza", "Oliveira", "Costa", "Martins", "Rocha", "Ferreira", "Almeida"};
         String[] posicoes = {"Goleiro", "Zagueiro", "Lateral", "Volante", "Meia", "Atacante"};
@@ -23,10 +24,10 @@ public class Main {
             Jogador jogador = new Jogador(nome, sobrenome, posicao, time, idade);
 
             System.out.println("\n🔹 Jogador " + i);
-            System.out.println("Nome: " + jogador.nome + " " + jogador.sobrenome);
-            System.out.println("Idade: " + jogador.idade + " anos");
-            System.out.println("Posição: " + jogador.posicoes);
-            System.out.println("Time: " + jogador.times);
+            System.out.println("Nome: " + jogador.getNomeCompleto());
+            System.out.println("Idade: " + jogador.getIdade() + " anos");
+            System.out.println("Posição: " + jogador.getPosicao());
+            System.out.println("Time: " + jogador.getTime());
+        }
     }
-}}
-
+}
