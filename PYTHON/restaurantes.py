@@ -10,7 +10,8 @@ class Restaurante:
     def __str__(self):
         return f'{self.nome} | {self.categoria}'
 
-    def listar_restaurantes():
+    @classmethod
+    def listar_restaurantes(cls):
         for restaurante in Restaurante.lista:
             print(f'{restaurante.nome} | {restaurante.categoria}')
 
@@ -34,8 +35,8 @@ class Musica:
         return f'{self.nome} | {self.artista} | {self.duracao}'
 
     
-
-    def listar_musicas():
+    @classmethod
+    def listar_musicas(cls):
         for musica in Musica.musicas:
             print (f'{musica.nome} | {musica.duracao} | {musica.artista}')
         
@@ -56,9 +57,10 @@ class Carro:
         Carro.carros.append(self)
 
     def __str__(self):
-        return f'{Carro.modelo} | {Carro.cor} | {Carro.ano}'
+        return f'{self.modelo} | {self.cor} | {self.ano}'
 
-    def todos_carros():
+    @classmethod
+    def todos_carros(cls):
         for carro in Carro.carros:
             print (f'{carro.modelo} | {carro.cor} | {carro.ano}')
 
@@ -77,15 +79,66 @@ class Cliente:
         self.endereco = endereco
         self.país = país
         self.idade = idade
+        self._ativo = False
         Cliente.clientes.append(self)
 
     def __str__(self):
-        return f'{Cliente.nome} | {Cliente.endereco} | {Cliente.país} | {Cliente.idade}'
+        return f'{self.nome} | {self.endereco} | {self.país} | {self.idade}'
 
-    def listar_clientes():
+    @classmethod
+    def listar_clientes(cls):
         for cliente in Cliente.clientes:
-            print (f'{cliente.nome} | {cliente.endereco} | {cliente.país} | {cliente.idade}')
+            print (f'{cliente.nome} | {cliente.endereco} | {cliente.país} | {cliente.idade} | {cliente.ativo}')
+
+    @property
+    def ativo(self):
+        return "verdadeiro" if self._ativo else "falso"
+
+    def alterar_estado(self):
+        self._ativo = not self._ativo
+
 
 cliente1 = Cliente('rafa', 'test', 'Brasil', 25)
+
+cliente1.alterar_estado()
+
 cliente2 = Cliente('bruno', 'test', 'Brasil', 33)
+
 Cliente.listar_clientes()
+
+#Crie uma nova classe chamada Pessoa com atributos como nome, idade e profissão. Adicione um método especial __str__ para imprimir uma representação em string da pessoa. 
+# Implemente também um método de instância chamado aniversario que aumenta a idade da pessoa em um ano. Por fim, adicione uma propriedade chamada saudacao que retorna uma 
+# mensagem de saudação personalizada com base na profissão da pessoa.
+
+class Pessoa:
+    lista = []
+    def __init__(self, nome, idade, profissao):
+        self.nome      = nome
+        self.idade     = idade 
+        self.profissao = profissao
+        Pessoa.lista.append(self)
+
+    def __str__(self):
+        return f'{self.nome} | {self.idade} | {self.profissao}'
+
+    def aniversario (self):
+        self.idade += 1
+
+    @property
+    def saudacao(self):
+        return f'Olá {self.nome}! Voce tem {self.idade} anos e trabalha com a profissao {self.profissao}'
+
+    @classmethod
+    def listar_todos(cls):
+        for pessoa in Pessoa.lista:
+            print(f"{pessoa.nome} | {pessoa.idade} | {pessoa.profissao}")
+
+
+pessoa1 = Pessoa('Sofia', 23, 'Dentista')
+
+pessoa1.listar_todos()
+
+print(pessoa1.saudacao)
+pessoa1.aniversario()
+
+pessoa1.listar_todos()
