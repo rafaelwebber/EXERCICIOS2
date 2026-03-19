@@ -19,7 +19,7 @@ restaurante_praca = Restaurante('pizza', 'italiana')
 
 restaurante_pizza = Restaurante('hamburguer', 'Americano')
 
-Restaurante.listar_restaurantes()
+#Restaurante.listar_restaurantes()
 
 
 class Musica: 
@@ -43,7 +43,7 @@ class Musica:
 
 musica1 = Musica('test', 'rafa', 35)
 
-Musica.listar_musicas()
+#Musica.listar_musicas()
 
 #1 Implemente uma classe chamada Carro com os atributos básicos, como modelo, cor e ano. 
 # Crie uma instância dessa classe e atribua valores aos seus atributos.
@@ -66,7 +66,7 @@ class Carro:
 
 carro1 = Carro('toyta', 'civic', 2014)
 
-Carro.todos_carros()
+#Carro.todos_carros()
 
 #Crie uma classe chamada Cliente e pense em 4 atributos. 
 # Em seguida, instancie 3 objetos desta classe e atribua valores aos seus atributos através de um método construtor.
@@ -104,7 +104,7 @@ cliente1.alterar_estado()
 
 cliente2 = Cliente('bruno', 'test', 'Brasil', 33)
 
-Cliente.listar_clientes()
+#Cliente.listar_clientes()
 
 #Crie uma nova classe chamada Pessoa com atributos como nome, idade e profissão. Adicione um método especial __str__ para imprimir uma representação em string da pessoa. 
 # Implemente também um método de instância chamado aniversario que aumenta a idade da pessoa em um ano. Por fim, adicione uma propriedade chamada saudacao que retorna uma 
@@ -136,9 +136,9 @@ class Pessoa:
 
 pessoa1 = Pessoa('Sofia', 23, 'Dentista')
 
-pessoa1.listar_todos()
+#pessoa1.listar_todos()
 
-print(pessoa1.saudacao)
+#print(pessoa1.saudacao)
 pessoa1.aniversario()
 
-pessoa1.listar_todos()
+#pessoa1.listar_todos()
