@@ -142,3 +142,45 @@ pessoa1 = Pessoa('Sofia', 23, 'Dentista')
 pessoa1.aniversario()
 
 #pessoa1.listar_todos()
+
+#1 Crie uma classe chamada ContaBancaria com um construtor que aceita os parâmetros titular e saldo. Inicie o atributo ativo como False por padrão.
+from PYTHON import classes 
+
+class ContaBancaria:
+    def __init__(self, titular, saldo):
+        self._titular = titular
+        self._saldo = saldo
+        self._ativo = False
+        self._avaliacao = []
+
+    @property
+    def titular(self):
+        return self._titular
+
+    @property
+    def saldo(self):
+        return self._saldo
+
+    @property
+    def ativo(self):
+        return "ativa" if self._ativo else "inativa"
+
+# 2 Na classe ContaBancaria, adicione um método especial __str__ que retorna uma mensagem formatada com o titular e o saldo da conta. Crie duas instâncias da classe e imprima essas instâncias.
+    def __str__(self):
+        return f'Olá {self.titular} seu saldo é R$ {self.saldo}. Sua conta está: {self.ativo}'
+
+# 3 Adicione um método de classe chamado ativar_conta à classe ContaBancaria que define o atributo ativo como True. Crie uma instância da classe, chame o método de classe e imprima o valor de ativo.
+    def ativar_conta(self):
+        self._ativo = True
+
+# 4 Refatore a classe ContaBancaria para utilizar a abordagem "pythonica" na criação de atributos. Utilize propriedades, se necessário.
+
+# 5 Crie uma instância da classe e imprima o valor da propriedade titular.
+
+conta1 = ContaBancaria("test", 100)
+conta2 = ContaBancaria("teste2", 200)
+
+print(conta1)
+conta1.ativar_conta()
+print(conta1)
+print(conta1.titular)  # 5 - imprimir a propriedade titular
