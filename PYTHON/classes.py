@@ -144,7 +144,7 @@ pessoa1.aniversario()
 #pessoa1.listar_todos()
 
 #1 Crie uma classe chamada ContaBancaria com um construtor que aceita os parâmetros titular e saldo. Inicie o atributo ativo como False por padrão.
-from PYTHON import classes 
+from avaliacao import Avaliacao
 
 class ContaBancaria:
     def __init__(self, titular, saldo):
@@ -165,13 +165,27 @@ class ContaBancaria:
     def ativo(self):
         return "ativa" if self._ativo else "inativa"
 
+    @property
+    def media_avaliacao(self):
+        if not self._avaliacao:
+            return "Nenhuma avaliação"
+
+        soma_das_notas = sum(avaliacao._nota for avaliacao in self._avaliacao)
+        quantidade_notas = len(self._avaliacao)
+        media = round(soma_das_notas / quantidade_notas, 1)
+        return media
+
 # 2 Na classe ContaBancaria, adicione um método especial __str__ que retorna uma mensagem formatada com o titular e o saldo da conta. Crie duas instâncias da classe e imprima essas instâncias.
     def __str__(self):
-        return f'Olá {self.titular} seu saldo é R$ {self.saldo}. Sua conta está: {self.ativo}'
+        return f'Olá {self.titular} seu saldo é R$ {self.saldo}. Sua conta está: {self.ativo}. Sua avaliação é: {self.media_avaliacao}'
 
 # 3 Adicione um método de classe chamado ativar_conta à classe ContaBancaria que define o atributo ativo como True. Crie uma instância da classe, chame o método de classe e imprima o valor de ativo.
     def ativar_conta(self):
         self._ativo = True
+
+    def receber_avaliacao(self, cliente, nota):
+        avaliacao = Avaliacao(cliente, nota)
+        self._avaliacao.append(avaliacao)
 
 # 4 Refatore a classe ContaBancaria para utilizar a abordagem "pythonica" na criação de atributos. Utilize propriedades, se necessário.
 
@@ -180,6 +194,9 @@ class ContaBancaria:
 conta1 = ContaBancaria("test", 100)
 conta2 = ContaBancaria("teste2", 200)
 
+conta1.receber_avaliacao('gui', 8)
+conta1.receber_avaliacao('rafa', 6)
+conta1.receber_avaliacao('sofia', 10)
 print(conta1)
 conta1.ativar_conta()
 print(conta1)
