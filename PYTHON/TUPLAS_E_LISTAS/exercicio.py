@@ -80,7 +80,80 @@ Saída esperada:
 Estoque combinado:
 ('Arroz', 'Feijão', 'Macarrão', 'Óleo', 'Sal', 'Açúcar')'''
 
-estoque1 = tuple(input("Produtos do estoque 1 (separados por vírgula): ").split(", "))
+'''estoque1 = tuple(input("Produtos do estoque 1 (separados por vírgula): ").split(", "))
 estoque2 = tuple(input("Produtos do estoque 2 (separados por vírgula): ").split(", "))
 estoque_combinado = estoque1 + estoque2  
-print(f"Estoque combinado:\n{estoque_combinado}")
+print(f"Estoque combinado:\n{estoque_combinado}")'''
+
+''' 05 -Camila adora receber amigos para jantares temáticos. Para o próximo encontro, ela quer garantir que a ordem de chegada seja respeitada, mas ainda precisa fazer ajustes na lista de convidados. 
+Camila quer adicionar novos nomes e organizá-los em posições específicas.
+
+Como você criaria um programa que mostre a lista inicial, permita a inserção de um novo nome em uma posição escolhida e exiba a lista atualizada?
+
+Exemplo de Entrada:
+
+Lista atual de convidados: ['Ana', 'Pedro', 'Carlos']
+Digite o nome do novo convidado: João
+Digite a posição na qual deseja inserir o convidado: 2
+Copiar código
+Saída esperada:
+
+Lista atualizada de convidados: ['Ana', 'João', 'Pedro', 'Carlos']'''
+
+'''lista_convidados = ['Ana', 'Pedro', 'Carlos']
+
+print(lista_convidados)
+
+convidado = input("Digite o nome do novo convidado: ")
+posicao = int(input('Digite a posição na qual deseja inserir o convidado: '))
+
+lista_convidados.insert(posicao - 1, convidado)
+
+print(lista_convidados)'''
+
+''' 06 -A Futuro Eventos, uma empresa especializada em organização de conferências, cometeu um erro ao registrar a sequência dos eventos de uma conferência importante. 
+Os eventos foram registrados na ordem inversa à que deveriam acontecer. Agora, a equipe precisa corrigir a ordem dos eventos para garantir que a conferência aconteça conforme o planejamento original.
+
+Considerando a lista inicial de eventos, crie um programa que permita ao organizador ordená-los, de forma que a lista final siga a sequência correta.
+
+eventos_registrados = ['Encerramento', 'Palestra 3', 'Palestra 2', 'Abertura']
+Copiar código
+Saída esperada:
+
+Ordem corrigida: ['Abertura', 'Palestra 2', 'Palestra 3', 'Encerramento']'''
+
+'''eventos_registrados = ['Encerramento', 'Palestra 3', 'Palestra 2', 'Abertura']
+
+eventos_registrados.reverse()
+print(eventos_registrados)'''
+
+
+
+
+'''07- O clube de atletismo Alura Runners organizou uma corrida e divulgou a lista com a classificação final dos participantes. 
+Mas, um erro foi identificado: um dos nomes está incorreto. O organizador precisa de um programa que permita localizar o nome errado e substituí-lo pelo correto.
+
+Como você escreveria um programa que solicite o nome errado, o nome correto e atualize a lista exibindo a nova classificação ao final?
+
+Exemplo de Entrada:
+
+Digite o nome incorreto: Carlos
+Digite o nome correto: João
+Copiar código
+Saída esperada:
+
+O nome Carlos foi substituído por João.
+Lista atualizada: ['Ana', 'João', 'Pedro']'''
+
+
+nomes = ['Ana', 'Carlos', 'Pedro']  
+nome_errado = input("Digite o nome incorreto: ")
+nome_certo = input("Digite o nome correto: ")
+
+if nome_errado in nomes:
+    index = nomes.index(nome_errado)
+    nomes[index] = nome_certo
+    print(f"O nome {nome_errado} foi substituído por {nome_certo}.")
+    print(f"Lista atualizada: {nomes}")
+else:
+    print("Nome incorreto não encontrado na lista.")
