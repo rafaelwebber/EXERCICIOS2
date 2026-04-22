@@ -1,6 +1,6 @@
-'''Ana está organizando uma festa de aniversário e precisa de uma lista de convidados que não tenha repetições , pois algumas pessoas foram convidadas mais de uma vez por engano. 
+''' 001 - Ana está organizando uma festa de aniversário e precisa de uma lista de convidados que não tenha repetições , pois algumas pessoas foram convidadas mais de uma vez por engano. 
 Ela gostaria que o programa solicitasse o nome dos convidados e, ao final, exibisse a lista organizada sem repetições.
-Escreva um programa que receba os nomes dos convidados até que o usuário digite 'sair', e ao final mostre a lista de convidados sem repetições.'''
+Escreva um programa que receba os nomes dos convidados até que o usuário digite 'sair', e ao final mostre a lista de convidados sem repetições.
 
 lista_convidados = []
 
@@ -14,4 +14,15 @@ while True:
         print('Encerrando...')
         break
 
-print (lista_convidados)
+print (lista_convidados)'''
+
+
+'''002 - Clara é editora de uma revista e deseja comparar dois artigos para identificar quais palavras aparecem em ambos. 
+Sua tarefa é criar um programa que receba dois textos e exiba o conjunto de palavras comuns entre eles.'''
+
+texto1=set(input("Digite o primeiro texto: ").lower().split())
+texto2=set(input("Digite o segundo texto: ").lower().split())
+
+comum = texto1.intersection(texto2)
+
+print(f'Palavras iguais são: {comum}')
