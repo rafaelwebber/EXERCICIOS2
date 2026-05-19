@@ -127,3 +127,100 @@ else:
 
 print(estoque[produto])'''
 
+'''008- Lucas é voluntário na organização de uma maratona e recebeu a lista de participantes com suas respectivas idades. 
+Agora, ele precisa de um programa que apresente três informações:
+
+Os nomes de todos os participantes.
+
+As idades de todos os participantes.
+
+Uma relação completa com o nome e a idade de cada um.
+
+Sua tarefa é criar esse programa com base nas informações fornecidas.
+
+
+participantes = { 
+
+    "Mariana": 25, 
+
+    "Carlos": 32, 
+
+    "Beatriz": 28, 
+
+    "Rafael": 35 
+
+} 
+
+print(f'Os nomes dos participantes são: {', '.join(participantes.keys())}')
+print(f'Suas idades são: {', '.join(str(idade) for idade in participantes.values())}')
+
+for nome, idade in participantes.items():
+    print(f'nome: {nome}, idade: {idade}')
+'''
+
+'''009- Laura está organizando um workshop sobre tecnologia e precisa de um programa que permita remover participantes que desistiram do evento. 
+O sistema armazena os participantes em um dicionário, onde cada chave é o nome e o valor é um conjunto com os dados do participante. 
+O programa deve solicitar o nome de um participante e remover esse nome da lista de participantes registrados, caso exista.
+
+
+participantes = { 
+
+    "Workshop 1": {"Alice", "Bruno", "Carla", "Diego"}, 
+
+    "Workshop 2": {"Fernanda", "Gustavo", "Helena"} 
+
+} 
+
+participante_remover = input("Digite o nome do participante que deseja remover: ")
+
+for workshop, nome in participantes.items():
+    print(workshop)
+    nome.discard(participante_remover)
+    print("Lista atualizada")
+
+for workshop, nome in participantes.items():
+    print(f"{workshop}: {nome}")'''
+
+'''010-Nathalia é gerente de uma loja virtual e precisa de um sistema que receba os registros de vendas organizados por categoria de produto. 
+Cada categoria contém uma lista de dicionários representando as vendas individuais, com informações sobre o produto, a quantidade vendida 
+e o valor unitário.
+Sua tarefa é criar um programa que exiba o total de vendas por categoria.'''
+
+
+vendas = { 
+
+    "Eletrônicos": [ 
+
+        {"produto": "Smartphone", "quantidade": 5, "valor_unitario": 2000}, 
+
+        {"produto": "Tablet", "quantidade": 3, "valor_unitario": 1500} 
+
+    ], 
+
+    "Eletrodomésticos": [ 
+
+        {"produto": "Geladeira", "quantidade": 2, "valor_unitario": 3000}, 
+
+        {"produto": "Micro-ondas", "quantidade": 4, "valor_unitario": 800} 
+
+    ], 
+
+    "Livros": [ 
+
+        {"produto": "Livro A", "quantidade": 10, "valor_unitario": 50}, 
+
+        {"produto": "Livro B", "quantidade": 5, "valor_unitario": 100} 
+
+    ] 
+
+} 
+print("Total de vendas por categoria: ")
+for categoria, produto in vendas.items():
+    valor_total = 0
+    for item in produto:
+        quantidade = item["quantidade"]
+        valor_unitario = item["valor_unitario"]
+        valor_total += quantidade * valor_unitario
+    
+    print(f'{categoria} : R$ {valor_total}')
+            
