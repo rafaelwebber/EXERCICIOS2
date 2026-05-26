@@ -1,12 +1,12 @@
 from sqlalchemy import \
-    Column, Integer, Interger, String, ForeignKey
+    Column, Integer, String, ForeignKey
 from database import Base
 
 class Estudante(Base):
     __tablename__ = 'estudantes'
     id = Column(
             Integer,
-            primary_key=True
+            primary_key=True,
             index = True
         )
     nome = Column(
@@ -26,7 +26,7 @@ class Matricula(Base):
     )
     estudante_id = Column(
         Integer,
-        ForeignKey('estudante.id')
+        ForeignKey('estudantes.id')
     )
     nome_disciplina = Column(
         String(100),
