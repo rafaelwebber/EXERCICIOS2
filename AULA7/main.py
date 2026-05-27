@@ -19,8 +19,9 @@ def get_db():
 @app.post('/estudantes', response_model=schemas.Estudante)#response_model=schemas.Estudante validação para estudantes
 def criar_estudante(estudante: schemas.EstudanteCreate, db: Session = Depends(get_db)):
     db_estudante = models.Estudante(
-        nome = estudante.nome,
-        perfil = models.Perfil(**estudante.perfil.dict())
+        nome=estudante.nome,
+        email=estudante.email,
+        perfil=models.Perfil(**estudante.perfil.model_dump()),
     )
     db.add(db_estudante)
     db.commit()
@@ -33,3 +34,43 @@ def listar_estudantes(db: Session = Depends(get_db)):
     return estudantes
 
 #professores, matriculos e disciplinas 
+@app.post('/professor', response_model=schemas.Professor)
+def criar_professor(professor: schemas.ProfessorCreate, db: Session = Depends(get_db)):
+    db_professor = models.Professor(
+        nome=professor.nome,
+        email=professor.email,
+    )
+    db.add(db_professor)
+    db.commit()
+    db.refresh(db_professor)
+    return db_professor
+
+@app.get('/professor', response_model=List[schemas.Professor])
+def listar_professor(db: Session = Depends(get_db)):
+    professores = db.query(models.Professor).options(joinedload(models.Professor.disciplinas)).all()
+    return professores
+
+@app.post('/disciplina', response_model=schemas.Disciplina)
+def criar_disciplina(disciplina: schemas.DisciplinaCreate, db: Session = Depends(get_db)):
+    db_disciplina = models.Disciplina(
+        nome=disciplina.nome,
+        professor_id=disciplina.professor_id,
+    )
+    db.add(db_disciplina)
+    db.commit()
+    db.refresh(db_disciplina)
+    return (
+        db.query(models.Disciplina)
+        .options(joinedload(models.Disciplina.professor))
+        .filter(models.Disciplina.id == db_disciplina.id)
+        .first()
+    )
+
+@app.get('/disciplina', response_model=List[schemas.Disciplina])
+def listar_disciplina(db: Session = Depends(get_db)):
+    disciplinas = (
+        db.query(models.Disciplina)
+        .options(joinedload(models.Disciplina.professor))
+        .all()
+    )
+    return disciplinas
