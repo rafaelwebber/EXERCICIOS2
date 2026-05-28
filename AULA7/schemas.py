@@ -16,7 +16,7 @@ class PerfilCreate(BaseModel):
 class Estudante(BaseModel):
     id: int
     nome: str
-    email: str
+    
     perfil: Optional[Perfil] = None
 
     class Config: 
@@ -68,14 +68,21 @@ class DisciplinaCreate(BaseModel):
     nome: str
     professor_id : int
 
+class EstudanteResumo(BaseModel):
+    nome: str
+
+    class Config:
+        from_attributes = True
+
+
 class Matricula(BaseModel):
-    estudante_id : int
-    disciplina_id : int
+    id: int
+    estudante : EstudanteResumo
+    disciplina : DisciplinaResumo
 
     class Config: 
         from_attributes = True
 
 class MatriculaCreate(BaseModel):
-    id: int
     estudante_id : int
     disciplina_id: int

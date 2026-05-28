@@ -74,3 +74,26 @@ def listar_disciplina(db: Session = Depends(get_db)):
         .all()
     )
     return disciplinas
+
+@app.post('/matricula', response_model=schemas.Matricula)
+def criar_matricula(matricula: schemas.MatriculaCreate, db: Session = Depends(get_db)):
+    db_matricula = models.Matricula(
+        estudante_id=matricula.estudante_id,
+        disciplina_id=matricula.disciplina_id,
+    )
+    db.add(db_matricula)
+    db.commit()
+    db.refresh(db_matricula)
+    return db_matricula
+
+@app.get('/matricula', response_model=List[schemas.Matricula])
+def listar_matriculas(db: Session = Depends(get_db)):
+    matriculas = (
+        db.query(models.Matricula)
+        .options(
+            joinedload(models.Matricula.estudante),
+            joinedload(models.Matricula.disciplina),
+            )
+        .all()
+    )
+    return matriculas
