@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from styles_flask.app.models.user import LoginPayload
+from app.models.user import LoginPayload
 main_bp = Blueprint('main_bp', __name__)
 from pydantic import ValidationError
 
