@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify
-
+from flask import Blueprint, jsonify, request
+from styles_flask.app.models.user import LoginPayload
 main_bp = Blueprint('main_bp', __name__)
-
+from pydantic import ValidationError
 
 
 
@@ -9,7 +9,22 @@ main_bp = Blueprint('main_bp', __name__)
 
 @main_bp.route('/login', methods=['POST'])
 def login():
-    return jsonify({"mensagem":"Realizar login"})
+    try:
+        raw_data = request.get_json()
+        user_data = LoginPayload(**raw_data)
+    
+    except ValidationError as e:
+        return jsonify({"error": e.errors()}), 400
+    except Exception as e:
+        jsonify({"error": "Erro durante a requisição do dado"}), 500
+
+    if user_data.username == 'admin' and user_data.password == '123':
+        return jsonify({"mensage": "Login bem sucedido!"})
+
+    else:
+        return jsonify({"mensage": "Credenciais Invalidas!"})
+    
+    return jsonify({"mensagem": f"Realizar login do usuario {user_data.model_dump_json}"})
 
 #RF: O sistema deve permitir a listagem de todos os produtos
 @main_bp.route('/products')
