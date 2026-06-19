@@ -22,6 +22,26 @@ def normalize_product_document(product: dict) -> dict:
     return normalized
 
 
+def build_validation_error_response(error: ValidationError):
+    errors = error.errors()
+    missing_fields = []
+
+    for item in errors:
+        if item.get("type") == "missing":
+            loc = item.get("loc", [])
+            if loc:
+                missing_fields.append(str(loc[-1]))
+
+    if missing_fields:
+        return jsonify({
+            "error": "Campos obrigatórios ausentes",
+            "missing_fields": sorted(set(missing_fields)),
+            "details": errors
+        }), 400
+
+    return jsonify({"error": errors}), 400
+
+
 
 #RF: O sistema deve permitir que um usuario se autentique para obter um token
 
@@ -123,9 +143,6 @@ def update_product(token, product_id):
         ProductDBMondel(**normalize_product_document(updated_product)).model_dump(by_alias=True, exclude_none=True)
     )
 
-
-
-
 #RF: O sistema deve permitir a deleção de um unico produto e produto existente
 @main_bp.route('/product/<string:product_id>', methods=['DELETE'])
 @token_required
@@ -150,12 +167,41 @@ def update_sales():
 
 
 @main_bp.route('/user', methods=['GET'])
-@token_required
+#@token_required
 def list_user():
     user_cursor = db.user.find({})
-    user_list = [
-        UserDBMondel()
-    ]
+    user_list = []
+
+    for user in user_cursor:
+        try:
+            user_list.append(
+                UserDBMondel(**user).model_dump(by_alias=True, exclude_none=True)
+            )
+        except ValidationError:
+            continue
+
+    return jsonify(user_list)
+
+@main_bp.route('/user', methods=['POST'])
+#@token_required
+def create_user():
+    try:
+        payload = request.get_json(silent=True)
+        if not payload or not isinstance(payload, dict):
+            return jsonify({"error": "Corpo da requisição JSON é obrigatório"}), 400
+
+        user = User(**payload)
+
+    except ValidationError as e:
+        return build_validation_error_response(e)
+    except Exception:
+        return jsonify({"error": "Erro interno ao criar usuário"}), 500
+
+    result = db.user.insert_one(user.model_dump())
+    return jsonify({"mensagem": "Sucesso", 
+            "id": str(result.inserted_id)}), 201
+
+
 
 @main_bp.route('/')
 def index():
