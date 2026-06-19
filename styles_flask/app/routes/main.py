@@ -8,6 +8,18 @@ from app.models.products import *
 from app.decorators import token_required
 from datetime import datetime, timedelta, timezone
 import jwt
+from app.models.user import *
+
+
+def normalize_product_document(product: dict) -> dict:
+    normalized = dict(product)
+    # Compatibilidade com registros antigos gravados com chave incorreta.
+    if 'stock' not in normalized and 'stok' in normalized:
+        normalized['stock'] = normalized['stok']
+    # Evita 500 em registros legados sem SKU.
+    if 'sku' not in normalized:
+        normalized['sku'] = 'SEM-SKU'
+    return normalized
 
 
 
@@ -44,7 +56,10 @@ def login():
 @main_bp.route('/products', methods=['GET'])
 def get_products():
     products_cursor = db.products.find({})
-    products_list = [ProductDBMondel(**product).model_dump(by_alias=True, exclude_none=True) for product in products_cursor]
+    products_list = [
+        ProductDBMondel(**normalize_product_document(product)).model_dump(by_alias=True, exclude_none=True)
+        for product in products_cursor
+    ]
     return jsonify(products_list)
 
 
@@ -77,26 +92,70 @@ def get_product_by_id(product_id):
     product = db.products.find_one({'_id':oid})
 
     if product:
-        product_model = ProductDBMondel(**product).model_dump(by_alias=True, exclude_none=True)
+        product_model = ProductDBMondel(**normalize_product_document(product)).model_dump(by_alias=True, exclude_none=True)
         return jsonify(product_model)
 
     else:
         return jsonify({"error":f"Produto com o id: {product_id} - Não encontrado"})
 
 #RF: O sistema deve permitir a atualização de um unico produto e prduto existente
-@main_bp.route('/product/<int:product_id>', methods=['PUT'])
-def update_product(product_id):
-    return jsonify({"mensagem":f"Esta é a rota de atualização do produto com o id {product_id}"})
+@main_bp.route('/product/<string:product_id>', methods=['PUT'])
+@token_required
+def update_product(token, product_id):
+    try:
+        oid = ObjectId(product_id)
+        update_data = UpdateProduct(**request.get_json())
+    except ValidationError as e:
+        return jsonify({"error": e.errors()}), 400
+    
+
+    update_result = db.products.update_one(
+        {"_id": oid},
+        {"$set": update_data.model_dump(exclude_unset=True)}
+    )
+
+    if update_result.matched_count == 0:
+        return jsonify({"error":"Produto não ncontrado" }), 404
+
+
+    updated_product = db.products.find_one({"_id": oid}) 
+    return jsonify(
+        ProductDBMondel(**normalize_product_document(updated_product)).model_dump(by_alias=True, exclude_none=True)
+    )
+
+
+
 
 #RF: O sistema deve permitir a deleção de um unico produto e produto existente
-@main_bp.route('/product/<int:product_id>', methods=['DELETE'])
-def delete_product(product_id):
-    return jsonify({"mensagem":f"Esta é uma mensagem de deleção do produto com o id {product_id}"})
+@main_bp.route('/product/<string:product_id>', methods=['DELETE'])
+@token_required
+def delete_product(token, product_id):
+    try: 
+        oid = ObjectId(product_id)
+    except Exception:
+        return jsonify({"error":"id do produto invalido"}), 400
+
+    delete_result = db.products.delete_one({"_id": oid})
+
+    if delete_result.deleted_count == 0:
+        return jsonify({"error": "Porduto não foi encontrado"}), 404
+
+
+    return "", 204
 
 #RF: O sistema deve permitir a importação de vendas atraves de um arquivo
 @main_bp.route('/sales/upload', methods=['POST'])
 def update_sales():
     return jsonify({"mensagem":f"Esta é a rota de upload do arquivo de vendas"})
+
+
+@main_bp.route('/user', methods=['GET'])
+@token_required
+def list_user():
+    user_cursor = db.user.find({})
+    user_list = [
+        UserDBMondel()
+    ]
 
 @main_bp.route('/')
 def index():
