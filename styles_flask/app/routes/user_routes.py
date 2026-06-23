@@ -83,6 +83,6 @@ def delete_user(token, user_id):
     if delete_result.deleted_count == 0:
         return jsonify({"error": "Usuario nao foi encontrado"}), 404
 
-    return "Usuario deletado com sucesso ", 204
+    return "", 204
 
 
