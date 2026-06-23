@@ -18,6 +18,8 @@ def create_app():
 
     from .routes.main import main_bp
     from .routes.category_routes import category_bp
+    from .routes.user_routes import user_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(category_bp)
+    app.register_blueprint(user_bp)
     return app

@@ -1,4 +1,5 @@
 from flask import Blueprint, current_app, jsonify, request
+from werkzeug.security import check_password_hash
 from app.models.user import LoginPayload
 main_bp = Blueprint('main_bp', __name__)
 from pydantic import ValidationError
@@ -8,7 +9,6 @@ from app.models.products import *
 from app.decorators import token_required
 from datetime import datetime, timedelta, timezone
 import jwt
-from app.models.user import *
 
 
 def normalize_product_document(product: dict) -> dict:
@@ -20,29 +20,6 @@ def normalize_product_document(product: dict) -> dict:
     if 'sku' not in normalized:
         normalized['sku'] = 'SEM-SKU'
     return normalized
-
-
-def build_validation_error_response(error: ValidationError):
-    errors = error.errors()
-    missing_fields = []
-
-    for item in errors:
-        if item.get("type") == "missing":
-            loc = item.get("loc", [])
-            if loc:
-                missing_fields.append(str(loc[-1]))
-
-    if missing_fields:
-        return jsonify({
-            "error": "Campos obrigatórios ausentes",
-            "missing_fields": sorted(set(missing_fields)),
-            "details": errors
-        }), 400
-
-    return jsonify({"error": errors}), 400
-
-
-
 #RF: O sistema deve permitir que um usuario se autentique para obter um token
 
 @main_bp.route('/login', methods=['POST'])
@@ -56,10 +33,12 @@ def login():
     except Exception:
         jsonify({"error": "Erro durante a requisição do dado"}), 500
 
-    if user_data.username == 'admin' and user_data.password == '123':
+    user = db.user.find_one({"username": user_data.username})
+    if user and check_password_hash(user["password_hash"], user_data.password):
         token = jwt.encode(
             {
                 "user_id": user_data.username,
+                "username": user["username"],
                 "exp": datetime.now(timezone.utc) + timedelta(minutes=30)
             },
             current_app.config['SECRET_KEY'],
@@ -164,43 +143,6 @@ def delete_product(token, product_id):
 @main_bp.route('/sales/upload', methods=['POST'])
 def update_sales():
     return jsonify({"mensagem":f"Esta é a rota de upload do arquivo de vendas"})
-
-
-@main_bp.route('/user', methods=['GET'])
-#@token_required
-def list_user():
-    user_cursor = db.user.find({})
-    user_list = []
-
-    for user in user_cursor:
-        try:
-            user_list.append(
-                UserDBMondel(**user).model_dump(by_alias=True, exclude_none=True)
-            )
-        except ValidationError:
-            continue
-
-    return jsonify(user_list)
-
-@main_bp.route('/user', methods=['POST'])
-#@token_required
-def create_user():
-    try:
-        payload = request.get_json(silent=True)
-        if not payload or not isinstance(payload, dict):
-            return jsonify({"error": "Corpo da requisição JSON é obrigatório"}), 400
-
-        user = User(**payload)
-
-    except ValidationError as e:
-        return build_validation_error_response(e)
-    except Exception:
-        return jsonify({"error": "Erro interno ao criar usuário"}), 500
-
-    result = db.user.insert_one(user.model_dump())
-    return jsonify({"mensagem": "Sucesso", 
-            "id": str(result.inserted_id)}), 201
-
 
 
 @main_bp.route('/')
