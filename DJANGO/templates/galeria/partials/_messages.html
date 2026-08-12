@@ -1,0 +1,35 @@
+{% if messages %}
+<div class="flash-messages" style="width:100%; max-width:520px; margin:0 0 1.25rem; display:flex; flex-direction:column; gap:0.75rem;">
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success flash-message flash-message--success" role="alert"
+             style="display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-radius:10px; border:2px solid #75B798; background:#198754; color:#FFFFFF; font-family:Poppins, sans-serif; font-size:1rem; font-weight:500; box-shadow:0 8px 20px rgba(0,0,0,0.35);">
+            <span>{{ message }}</span>
+            <button type="button" aria-label="Fechar" onclick="this.parentElement.remove()"
+                    style="background:transparent; border:none; color:#fff; font-size:1.5rem; cursor:pointer; line-height:1;">×</button>
+        </div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger flash-message flash-message--error" role="alert"
+             style="display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-radius:10px; border:2px solid #EA868F; background:#DC3545; color:#FFFFFF; font-family:Poppins, sans-serif; font-size:1rem; font-weight:500; box-shadow:0 8px 20px rgba(0,0,0,0.35);">
+            <span>{{ message }}</span>
+            <button type="button" aria-label="Fechar" onclick="this.parentElement.remove()"
+                    style="background:transparent; border:none; color:#fff; font-size:1.5rem; cursor:pointer; line-height:1;">×</button>
+        </div>
+        {% elif message.tags == 'warning' %}
+        <div class="alert alert-warning flash-message flash-message--warning" role="alert"
+             style="display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-radius:10px; border:2px solid #FFDA6A; background:#FFC107; color:#332701; font-family:Poppins, sans-serif; font-size:1rem; font-weight:500; box-shadow:0 8px 20px rgba(0,0,0,0.35);">
+            <span>{{ message }}</span>
+            <button type="button" aria-label="Fechar" onclick="this.parentElement.remove()"
+                    style="background:transparent; border:none; color:#332701; font-size:1.5rem; cursor:pointer; line-height:1;">×</button>
+        </div>
+        {% else %}
+        <div class="alert alert-info flash-message flash-message--info" role="alert"
+             style="display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-radius:10px; border:2px solid #6EA8FE; background:#0D6EFD; color:#FFFFFF; font-family:Poppins, sans-serif; font-size:1rem; font-weight:500; box-shadow:0 8px 20px rgba(0,0,0,0.35);">
+            <span>{{ message }}</span>
+            <button type="button" aria-label="Fechar" onclick="this.parentElement.remove()"
+                    style="background:transparent; border:none; color:#fff; font-size:1.5rem; cursor:pointer; line-height:1;">×</button>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
